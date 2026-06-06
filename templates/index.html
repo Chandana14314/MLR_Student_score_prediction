@@ -1,0 +1,382 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Performance Predictor</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#050816;
+    overflow:hidden;
+    position:relative;
+}
+
+/* Animated Neon Background */
+
+body::before{
+    content:'';
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:
+    repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 50px,
+        rgba(0,255,255,0.05) 50px,
+        rgba(0,255,255,0.05) 52px
+    );
+    animation:moveLines 10s linear infinite;
+}
+
+@keyframes moveLines{
+    from{
+        transform:translateX(-10%);
+    }
+    to{
+        transform:translateX(10%);
+    }
+}
+
+/* Neon Glow Circles */
+
+.circle{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(60px);
+    opacity:0.25;
+}
+
+.circle:nth-child(1){
+    width:220px;
+    height:220px;
+    background:cyan;
+    top:10%;
+    left:10%;
+    animation:float 6s ease-in-out infinite;
+}
+
+.circle:nth-child(2){
+    width:280px;
+    height:280px;
+    background:#00ff88;
+    right:10%;
+    bottom:10%;
+    animation:float 8s ease-in-out infinite;
+}
+
+.circle:nth-child(3){
+    width:180px;
+    height:180px;
+    background:#7c3aed;
+    left:20%;
+    bottom:20%;
+    animation:float 10s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-30px);
+    }
+}
+
+/* Glass Container */
+
+.container{
+    width:550px;
+    max-width:95%;
+    padding:40px;
+    border-radius:25px;
+
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(15px);
+
+    border:1px solid rgba(0,255,255,0.3);
+
+    box-shadow:
+    0 0 20px rgba(0,255,255,0.3),
+    0 0 40px rgba(0,255,255,0.15);
+
+    text-align:center;
+    color:white;
+    z-index:2;
+}
+
+/* Logo */
+
+.logo{
+    font-size:65px;
+    margin-bottom:10px;
+}
+
+/* Heading */
+
+h1{
+    color:#00ffff;
+    text-shadow:
+    0 0 10px cyan,
+    0 0 20px cyan;
+}
+
+.subtitle{
+    color:#cbd5e1;
+    margin:10px 0 25px;
+}
+
+/* Inputs */
+
+.input-group{
+    margin-bottom:15px;
+}
+
+input,
+select{
+    width:100%;
+    padding:15px;
+    border-radius:12px;
+    border:1px solid rgba(0,255,255,0.4);
+
+    background:rgba(255,255,255,0.05);
+
+    color:white;
+    font-size:15px;
+
+    outline:none;
+    transition:.4s;
+}
+
+input::placeholder{
+    color:#cbd5e1;
+}
+
+select option{
+    color:black;
+}
+
+input:focus,
+select:focus{
+    box-shadow:
+    0 0 10px cyan,
+    0 0 20px cyan;
+
+    border-color:cyan;
+}
+
+/* Button */
+
+button{
+    width:100%;
+    padding:15px;
+
+    border:none;
+    border-radius:12px;
+
+    background:linear-gradient(
+        90deg,
+        #00ffff,
+        #2563eb
+    );
+
+    color:white;
+    font-size:17px;
+    font-weight:600;
+
+    cursor:pointer;
+    transition:.4s;
+}
+
+button:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 0 15px cyan,
+    0 0 30px cyan;
+}
+
+/* Prediction Result */
+
+.result{
+    margin-top:25px;
+    padding:20px;
+
+    border-radius:15px;
+
+    background:rgba(0,255,255,0.08);
+
+    border:1px solid rgba(0,255,255,0.4);
+
+    animation:showResult .5s ease;
+}
+
+@keyframes showResult{
+    from{
+        opacity:0;
+        transform:scale(.8);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.result h2{
+    color:#00ffff;
+}
+
+.score{
+    margin-top:10px;
+
+    font-size:48px;
+    font-weight:bold;
+
+    text-shadow:
+    0 0 10px cyan,
+    0 0 20px cyan,
+    0 0 40px cyan;
+}
+
+/* Footer */
+
+.footer{
+    margin-top:25px;
+    color:#cbd5e1;
+}
+
+.footer h3{
+    color:#00ffff;
+    margin-top:10px;
+
+    text-shadow:
+    0 0 10px cyan;
+}
+
+.footer p{
+    margin:4px 0;
+    font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="circle"></div>
+<div class="circle"></div>
+<div class="circle"></div>
+
+<div class="container">
+
+    <div class="logo">🤖</div>
+
+    <h1>Student Performance Predictor</h1>
+
+    <p class="subtitle">
+        AI Powered Performance Prediction System
+    </p>
+
+    <form action="/predict" method="POST">
+
+        <div class="input-group">
+            <input type="number"
+                   step="any"
+                   name="hours_studied"
+                   placeholder="📚 Hours Studied"
+                   required>
+        </div>
+
+        <div class="input-group">
+            <input type="number"
+                   step="any"
+                   name="previous_scores"
+                   placeholder="📈 Previous Scores"
+                   required>
+        </div>
+
+        <div class="input-group">
+            <select name="extracurricular" required>
+                <option value="">🏆 Extracurricular Activities</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <input type="number"
+                   step="any"
+                   name="sleep_hours"
+                   placeholder="😴 Sleep Hours"
+                   required>
+        </div>
+
+        <div class="input-group">
+            <input type="number"
+                   step="any"
+                   name="sample_papers"
+                   placeholder="📝 Sample Question Papers Practiced"
+                   required>
+        </div>
+
+        <button type="submit">
+            🚀 Predict Performance
+        </button>
+
+    </form>
+
+    {% if Prediction %}
+
+    <div class="result">
+
+        <h2>Predicted Performance Index</h2>
+
+        <div class="score">
+            {{ Prediction }}
+        </div>
+
+    </div>
+
+    {% endif %}
+
+    <div class="footer">
+
+        <hr style="border:0.5px solid rgba(255,255,255,0.2); margin:20px 0;">
+
+        <p>🚀 Flask • Python • Machine Learning • Linear Regression</p>
+
+        <h3>👩‍💻 Chandana DS</h3>
+
+        <p>Data Science & Generative AI Enthusiast</p>
+
+        <p>GenAI Intern @ Vihara Tech</p>
+
+        <br>
+
+        <p style="font-size:12px;">
+            © 2026 Student Performance Predictor. All Rights Reserved.
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+```
